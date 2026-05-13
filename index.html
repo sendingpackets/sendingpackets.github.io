@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/x-icon" href="assets/misc/favi.png" />
+<title>terrorism.cc</title>
+<link rel="stylesheet" href="assets/css/site.css" />
+<script>
+  if (window.location.pathname === "/index.html") {
+    window.location.replace("/");
+  }
+</script>
+<script src="assets/js/site-guard.js"></script>
+</head>
+<body class="enter-locked">
+  <div class="stage"></div>
+
+  <div class="enter-screen" id="enter-screen" aria-label="Open page">
+    <div class="enter-message">Click on me to open this page.</div>
+  </div>
+
+  <div class="handle" id="handle"><span class="text default">kunt was here</span><span class="text hover">my discord</span></div>
+  <div class="music-progress" aria-hidden="true"><div class="music-progress-fill" id="music-progress-fill"></div></div>
+  <audio id="ambient-audio" src="assets/misc/g47Fe6Wf73yeblhRHh.mp3" preload="auto" loop></audio>
+
+<script>
+  const handle = document.getElementById('handle');
+  const enterScreen = document.getElementById('enter-screen');
+  const ambientAudio = document.getElementById('ambient-audio');
+  const musicProgressFill = document.getElementById('music-progress-fill');
+  const DISCORD_ID = '381725850137264128';
+  const INTRO_STING_KEY = 'mOco7LWe9juQE8TJJD';
+  const INTRO_STING_VALUE = '1';
+  const INTRO_STINGS = [
+    'assets/misc/z0G43VOqMeyhgWQNqN.wav',
+    'assets/misc/HyKy5mTB2eD69eaIdH.wav'
+  ];
+  let lastAudioTime = 0;
+  let drainingProgress = false;
+  let progressRaf = null;
+  let introStingScheduled = false;
+
+  document.querySelectorAll('.handle .text, .enter-message').forEach((text) => {
+    const content = text.textContent;
+    text.textContent = '';
+
+    for (const [index, char] of [...content].entries()) {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.style.setProperty('--i', index);
+      span.textContent = char === ' ' ? '\u00a0' : char;
+      text.appendChild(span);
+    }
+  });
+
+  window.addEventListener('load', () => {
+    document.body.classList.add('enter-ready');
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowUp' || !document.body.classList.contains('enter-locked')) return;
+
+    try {
+      localStorage.removeItem(INTRO_STING_KEY);
+    } catch (_) {}
+
+    document.cookie = `${INTRO_STING_KEY}=; Max-Age=0; Path=/; SameSite=Lax`;
+    introStingScheduled = false;
+  });
+
+  enterScreen.addEventListener('click', () => {
+    document.body.classList.add('enter-open');
+    document.body.classList.remove('enter-locked');
+    ambientAudio.volume = 0.28;
+    ambientAudio.play().catch(() => {});
+    updateMusicProgress();
+  }, { once: true });
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function updateMusicProgress() {
+    const duration = ambientAudio.duration;
+
+    if (Number.isFinite(duration) && duration > 0) {
+      if (ambientAudio.currentTime + 0.5 < lastAudioTime) {
+        drainingProgress = true;
+        musicProgressFill.classList.add('draining');
+
+        window.setTimeout(() => {
+          musicProgressFill.classList.remove('draining');
+          musicProgressFill.style.transform = '';
+          drainingProgress = false;
+        }, 1100);
+      }
+
+      lastAudioTime = ambientAudio.currentTime;
+
+      if (ambientAudio.currentTime >= 5) {
+        scheduleIntroSting();
+      }
+
+      if (!drainingProgress) {
+        const progress = Math.min(1, ambientAudio.currentTime / duration);
+        musicProgressFill.style.transform = `scaleX(${progress})`;
+      }
+    }
+
+    progressRaf = window.requestAnimationFrame(updateMusicProgress);
+  }
+
+  function hasPlayedIntroSting() {
+    try {
+      if (localStorage.getItem(INTRO_STING_KEY) === INTRO_STING_VALUE) return true;
+    } catch (_) {}
+
+    return document.cookie
+      .split(';')
+      .some((cookie) => cookie.trim() === `${INTRO_STING_KEY}=${INTRO_STING_VALUE}`);
+  }
+
+  function markIntroStingPlayed() {
+    try {
+      localStorage.setItem(INTRO_STING_KEY, INTRO_STING_VALUE);
+    } catch (_) {}
+
+    document.cookie = `${INTRO_STING_KEY}=${INTRO_STING_VALUE}; Max-Age=315360000; Path=/; SameSite=Lax`;
+  }
+
+  function scheduleIntroSting() {
+    if (introStingScheduled) return;
+    introStingScheduled = true;
+
+    if (hasPlayedIntroSting()) return;
+
+    markIntroStingPlayed();
+
+    const randomByte = new Uint8Array(1);
+    crypto.getRandomValues(randomByte);
+    const src = INTRO_STINGS[randomByte[0] % INTRO_STINGS.length];
+    const sting = new Audio(src);
+    sting.volume = 0.15;
+    sting.play().catch(() => {});
+  }
+
+  handle.addEventListener('click', async (e) => {
+    try {
+      await navigator.clipboard.writeText(DISCORD_ID);
+    } catch (err) {
+      const ta = document.createElement('textarea');
+      ta.value = DISCORD_ID;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(ta);
+    }
+
+    const x = (e.clientX || mouseX);
+    const y = (e.clientY || mouseY);
+    const note = document.createElement('div');
+    note.className = 'copied';
+    note.textContent = 'Copied';
+    note.style.left = x + 'px';
+    note.style.top  = (y - 8) + 'px';
+    document.body.appendChild(note);
+    note.addEventListener('animationend', () => note.remove());
+  });
+</script>
+</body>
+</html>

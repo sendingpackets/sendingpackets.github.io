@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>terrorism.cc</title>
+<link rel="stylesheet" href="assets/css/site.css" />
+<script src="assets/js/site-guard.js"></script>
+</head>
+<body>
+  <main class="stage" aria-label="Access denied">
+    <div class="message">You're not supposed to be here.</div>
+  </main>
+  <audio id="ad-audio" src="assets/misc/q1gYCx2wL4tI3uEkC6.mp3" preload="auto" loop></audio>
+
+<script>
+  const adAudio = document.getElementById('ad-audio');
+  adAudio.volume = 0.28;
+  adAudio.play().catch(() => {
+    document.addEventListener('pointerdown', () => adAudio.play().catch(() => {}), { once: true });
+    document.addEventListener('keydown', () => adAudio.play().catch(() => {}), { once: true });
+  });
+
+  document.querySelectorAll('.message').forEach((message) => {
+    const content = message.textContent;
+    message.textContent = '';
+
+    for (const [index, char] of [...content].entries()) {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.style.setProperty('--i', index);
+      span.textContent = char === ' ' ? '\u00a0' : char;
+      message.appendChild(span);
+    }
+  });
+
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_~";
+
+  function randomPath() {
+    const length = Math.floor(Math.random() * 11) + 20;
+    let path = "/";
+
+    for (let i = 0; i < length; i++) {
+      path += chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    return path;
+  }
+
+  const randomizeUrl = () => {
+    try {
+      window.history.replaceState({}, document.title, randomPath());
+    } catch (_) {}
+  };
+
+  randomizeUrl();
+  const randomizer = window.setInterval(randomizeUrl, 50);
+
+</script>
+</body>
+</html>
