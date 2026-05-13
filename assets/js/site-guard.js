@@ -9,7 +9,7 @@
   document.documentElement.innerHTML =
     '<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
     '<meta name="robots" content="noindex, nofollow"><title>terrorism.cc</title>' +
-    '<link rel="stylesheet" href="assets/css/site.css"></head>' +
+    '<link rel="stylesheet" href="/assets/css/site.css"></head>' +
     '<body class="mobile-blocked"><div class="mobile-message">' +
     '<span class="char" style="--i:0">M</span><span class="char" style="--i:1">o</span><span class="char" style="--i:2">b</span><span class="char" style="--i:3">i</span><span class="char" style="--i:4">l</span><span class="char" style="--i:5">e</span> ' +
     '<span class="char" style="--i:7">i</span><span class="char" style="--i:8">s</span> ' +
@@ -86,7 +86,7 @@ function obliteratePage() {
     document.documentElement.innerHTML =
       '<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
       '<meta name="robots" content="noindex, nofollow"><title>Don\'t mess around.</title>' +
-      '<link rel="stylesheet" href="assets/css/site.css"></head>' +
+      '<link rel="stylesheet" href="/assets/css/site.css"></head>' +
       '<body class="obliterate-screen"><main class="stage" aria-label="Inspection blocked"><div class="message"><span class="char" style="--i:0">S</span><span class="char" style="--i:1">t</span><span class="char" style="--i:2">o</span><span class="char" style="--i:3">p</span><span class="char" style="--i:4">&nbsp;</span><span class="char" style="--i:5">t</span><span class="char" style="--i:6">r</span><span class="char" style="--i:7">y</span><span class="char" style="--i:8">i</span><span class="char" style="--i:9">n</span><span class="char" style="--i:10">g</span><span class="char" style="--i:11">&nbsp;</span><span class="char" style="--i:12">t</span><span class="char" style="--i:13">o</span><span class="char" style="--i:14">&nbsp;</span><span class="char" style="--i:15">m</span><span class="char" style="--i:16">e</span><span class="char" style="--i:17">s</span><span class="char" style="--i:18">s</span><span class="char" style="--i:19">&nbsp;</span><span class="char" style="--i:20">a</span><span class="char" style="--i:21">r</span><span class="char" style="--i:22">o</span><span class="char" style="--i:23">u</span><span class="char" style="--i:24">n</span><span class="char" style="--i:25">d</span><span class="char" style="--i:26">.</span></div></main></body>';
   } catch (_) {}
 
