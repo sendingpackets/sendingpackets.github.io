@@ -97,13 +97,14 @@ body.enter-open .enter-screen {
   position: relative;
 }
 
-.stage-image-stack .stage-image:not(.stage-image--anchor) {
+.stage-image-stack .stage-image--variant {
   position: absolute;
   top: 0;
   left: 0;
 }
 
-.stage-image.active {
+.stage-image--base,
+.stage-image--variant.active {
   opacity: 1;
 }
 
