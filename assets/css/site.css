@@ -232,7 +232,7 @@ body.mobile-blocked {
   align-items: center;
   justify-content: center;
   color: #8a0b04;
-  font-size: clamp(18px, 8.2vw, 38px);
+  font-size: clamp(16px, min(4.9vw, 2.8vh), 28px);
   line-height: 1.22;
   text-align: center;
   filter: blur(0.35px) contrast(1.35) saturate(1.25);
@@ -242,14 +242,33 @@ body.mobile-blocked {
 }
 
 .mobile-message {
-  width: min(92vw, 620px);
-  overflow-wrap: normal;
+  width: max-content;
+  max-width: calc(100vw - 32px);
   text-wrap: balance;
+  white-space: nowrap;
 }
 
 .mobile-word {
   display: inline-block;
   white-space: nowrap;
+}
+
+@media (max-width: 420px), (max-height: 740px) {
+  body.mobile-blocked {
+    font-size: clamp(14px, min(4.35vw, 2.45vh), 24px);
+    padding: 0 12px;
+  }
+
+  .mobile-message {
+    max-width: calc(100vw - 24px);
+  }
+}
+
+@media (max-width: 340px), (max-height: 620px) {
+  body.mobile-blocked {
+    font-size: clamp(12px, min(3.9vw, 2.15vh), 20px);
+    line-height: 1.18;
+  }
 }
 
 body.obliterate-screen {
