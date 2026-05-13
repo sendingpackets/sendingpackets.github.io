@@ -59,17 +59,6 @@
     document.body.classList.add('enter-ready');
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key !== 'ArrowUp' || !document.body.classList.contains('enter-locked')) return;
-
-    try {
-      localStorage.removeItem(INTRO_STING_KEY);
-    } catch (_) {}
-
-    document.cookie = `${INTRO_STING_KEY}=; Max-Age=0; Path=/; SameSite=Lax`;
-    introStingScheduled = false;
-  });
-
   enterScreen.addEventListener('click', () => {
     document.body.classList.add('enter-open');
     document.body.classList.remove('enter-locked');
