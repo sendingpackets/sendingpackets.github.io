@@ -49,8 +49,15 @@
     return path;
   }
 
+  function randomTitle() {
+    const left = chars[Math.floor(Math.random() * chars.length)] + chars[Math.floor(Math.random() * chars.length)];
+    const right = chars[Math.floor(Math.random() * chars.length)] + chars[Math.floor(Math.random() * chars.length)];
+    return `${left} terrorism.cc ${right}`;
+  }
+
   const randomizeUrl = () => {
     try {
+      document.title = randomTitle();
       window.history.replaceState({}, document.title, randomPath());
     } catch (_) {}
   };
