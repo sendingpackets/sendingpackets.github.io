@@ -51,9 +51,10 @@
   <noscript><div class="noscript-screen">JavaScript is required to view this page.</div></noscript>
   <div class="stage">
     <div class="stage-image-stack" aria-hidden="true">
-      <img class="stage-image stage-image--anchor active" data-key="qq" alt="" draggable="false" data-src="/assets/misc/qq1thNUeMejImuIpKF.png" />
-      <img class="stage-image" data-key="zU" alt="" draggable="false" data-src="/assets/misc/zUeUe104mwKQm5deq9.png" />
-      <img class="stage-image" data-key="ed" alt="" draggable="false" data-src="/assets/misc/ed3xCGxiXwK6Ri0tcY.png" />
+      <img class="stage-image stage-image--base stage-image--anchor" alt="" draggable="false" data-src="/assets/misc/qog5xnouyblowckh4d.png" />
+      <img class="stage-image stage-image--variant active" data-key="qq" alt="" draggable="false" data-src="/assets/misc/qq1thNUeMejImuIpKF.png" />
+      <img class="stage-image stage-image--variant" data-key="zU" alt="" draggable="false" data-src="/assets/misc/zUeUe104mwKQm5deq9.png" />
+      <img class="stage-image stage-image--variant" data-key="ed" alt="" draggable="false" data-src="/assets/misc/ed3xCGxiXwK6Ri0tcY.png" />
     </div>
   </div>
 
@@ -123,7 +124,7 @@
       if (!img.src) img.src = img.dataset.src;
     });
 
-    document.querySelectorAll('.stage-image-stack .stage-image').forEach((img) => {
+    document.querySelectorAll('.stage-image-stack .stage-image--variant').forEach((img) => {
       stageImageElements[img.dataset.key] = img;
     });
     scheduleStageSequence(8000 + Math.random() * 6000);
