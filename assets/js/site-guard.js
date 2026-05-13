@@ -1,5 +1,5 @@
 (function () {
-  const CACHE_VERSION = "20260513-1";
+  const CACHE_VERSION = "20260513-2";
   const mobileByUserAgent = /Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const mobileByPointer = window.matchMedia("(pointer: coarse)").matches &&
     window.matchMedia("(max-width: 900px)").matches;
@@ -28,7 +28,6 @@
     mobileWord("Please") + " " + mobileWord("view") + " " + mobileWord("on") + " " + mobileWord("desktop.") +
     '</div></body></html>';
 
-  try { window.stop(); } catch (_) {}
   document.open();
   document.write(html);
   document.close();
@@ -45,7 +44,7 @@ if (location.pathname === "/index.html") {
 
   const isAdPage = location.pathname === "/AD.html";
 
-  navigator.serviceWorker.register("/assets/js/site-sw.js?v=20260513-1", {
+  navigator.serviceWorker.register("/assets/js/site-sw.js?v=20260513-2", {
     scope: "/",
     updateViaCache: "none"
   }).then((registration) => {
