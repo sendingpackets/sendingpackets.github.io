@@ -1,15 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
+<script>
+(function () {
+  const mobileByUserAgent = /Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const mobileByPointer = window.matchMedia("(pointer: coarse)").matches &&
+    window.matchMedia("(max-width: 900px)").matches;
+
+  if (!mobileByUserAgent && !mobileByPointer) return;
+
+  let charIndex = 0;
+
+  function mobileWord(word) {
+    const letters = Array.from(word, (letter) => {
+      const index = charIndex++;
+      return '<span class="char" style="--i:' + index + '">' + letter + '</span>';
+    }).join("");
+
+    charIndex++;
+    return '<span class="mobile-word">' + letters + '</span>';
+  }
+
+  const message =
+    mobileWord("You're") + " " + mobileWord("not") + " " + mobileWord("supposed") + " " +
+    mobileWord("to") + " " + mobileWord("be") + " " + mobileWord("here.");
+
+  const html =
+    '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+    '<meta name="robots" content="noindex, nofollow"><title>terrorism.cc</title>' +
+    '<style>html,body{margin:0;padding:0;height:100%;background:#000;overflow:hidden;font-family:"Mongolian Baiti",serif}body{display:flex;align-items:center;justify-content:center;color:#8a0b04;font-size:clamp(22px,min(8vw,5.2vh),46px);line-height:1.08;text-align:center;filter:blur(.5px) contrast(1.45) saturate(1.1);padding:0 14px;box-sizing:border-box;text-shadow:0 0 2px #8a0b04,0 0 7px #8a0b04,0 0 18px #8a0b04,0 0 32px #550400}.mobile-message{width:min(100%,900px);max-width:calc(100vw - 28px);text-wrap:balance;white-space:normal}.mobile-word{display:inline-block;white-space:nowrap}.char{display:inline-block;animation:noodleWave 8.12s ease-in-out infinite;animation-delay:calc(var(--i) * -.18s);transform-origin:50% 70%;will-change:transform}@media (max-width:420px),(max-height:740px){body{font-size:clamp(20px,min(7.2vw,4.6vh),38px);padding:0 12px}.mobile-message{max-width:calc(100vw - 24px)}}@media (max-width:340px),(max-height:620px){body{font-size:clamp(18px,min(6.4vw,4vh),32px);line-height:1.12}}@keyframes noodleWave{0%,100%{transform:translateY(0) rotate(0deg) skewX(0deg)}20%{transform:translateY(-1.2px) rotate(-1.8deg) skewX(3deg)}45%{transform:translateY(.9px) rotate(1.4deg) skewX(-2.5deg)}70%{transform:translateY(-.6px) rotate(1deg) skewX(1.8deg)}}</style></head>' +
+    '<body><div class="mobile-message">' + message + '</div></body></html>';
+
+  document.open();
+  document.write(html);
+  document.close();
+  try { window.stop(); } catch (_) {}
+  throw new Error("__mobile_blocked__");
+})();
+</script>
+<script>document.documentElement.classList.remove('no-js');</script>
+<noscript>
+<style>
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+body > *:not(noscript) {
+  display: none !important;
+}
+.noscript-ad-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 14px;
+  color: #8a0b04;
+  font-family: "Mongolian Baiti", serif;
+  font-size: clamp(22px, min(8vw, 5.2vh), 46px);
+  line-height: 1.08;
+  text-align: center;
+  text-shadow: 0 0 2px #8a0b04, 0 0 7px #8a0b04, 0 0 18px #8a0b04, 0 0 32px #550400;
+}
+</style>
+</noscript>
 <link rel="icon" type="image/png" href="/assets/misc/zpos1ZNo6d4PDOffAT.png" />
 <title>terrorism.cc</title>
-<link rel="stylesheet" href="/assets/css/site.css?v=20260513-2" />
-<script src="/assets/js/site-guard.js?v=20260513-2"></script>
+<link rel="stylesheet" href="/assets/css/site.css?v=20260513-3" />
+<script src="/assets/js/site-guard.js?v=20260513-3"></script>
 </head>
 <body>
+  <noscript><div class="noscript-ad-screen">You're not supposed to be here.</div></noscript>
   <main class="stage" aria-label="Access denied">
     <div class="message">You're not supposed to be here.</div>
   </main>
