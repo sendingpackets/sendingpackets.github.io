@@ -6,20 +6,25 @@
 
   if (!isMobile) return;
 
+  const charIndex = { value: 0 };
+  const mobileWord = (word) => {
+    const letters = Array.from(word, (letter) => {
+      const index = charIndex.value++;
+      return `<span class="char" style="--i:${index}">${letter}</span>`;
+    }).join("");
+
+    charIndex.value++;
+    return `<span class="mobile-word">${letters}</span>`;
+  };
+
   document.documentElement.innerHTML =
     '<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
     '<meta name="robots" content="noindex, nofollow"><title>terrorism.cc</title>' +
     '<link rel="stylesheet" href="/assets/css/site.css"></head>' +
     '<body class="mobile-blocked"><div class="mobile-message">' +
-    '<span class="char" style="--i:0">M</span><span class="char" style="--i:1">o</span><span class="char" style="--i:2">b</span><span class="char" style="--i:3">i</span><span class="char" style="--i:4">l</span><span class="char" style="--i:5">e</span> ' +
-    '<span class="char" style="--i:7">i</span><span class="char" style="--i:8">s</span> ' +
-    '<span class="char" style="--i:10">n</span><span class="char" style="--i:11">o</span><span class="char" style="--i:12">t</span> ' +
-    '<span class="char" style="--i:14">s</span><span class="char" style="--i:15">u</span><span class="char" style="--i:16">p</span><span class="char" style="--i:17">p</span><span class="char" style="--i:18">o</span><span class="char" style="--i:19">r</span><span class="char" style="--i:20">t</span><span class="char" style="--i:21">e</span><span class="char" style="--i:22">d</span><span class="char" style="--i:23">.</span>' +
+    mobileWord("Mobile") + " " + mobileWord("is") + " " + mobileWord("not") + " " + mobileWord("supported.") +
     '<br>' +
-    '<span class="char" style="--i:24">P</span><span class="char" style="--i:25">l</span><span class="char" style="--i:26">e</span><span class="char" style="--i:27">a</span><span class="char" style="--i:28">s</span><span class="char" style="--i:29">e</span> ' +
-    '<span class="char" style="--i:31">v</span><span class="char" style="--i:32">i</span><span class="char" style="--i:33">e</span><span class="char" style="--i:34">w</span> ' +
-    '<span class="char" style="--i:36">o</span><span class="char" style="--i:37">n</span> ' +
-    '<span class="char" style="--i:39">d</span><span class="char" style="--i:40">e</span><span class="char" style="--i:41">s</span><span class="char" style="--i:42">k</span><span class="char" style="--i:43">t</span><span class="char" style="--i:44">o</span><span class="char" style="--i:45">p</span><span class="char" style="--i:46">.</span>' +
+    mobileWord("Please") + " " + mobileWord("view") + " " + mobileWord("on") + " " + mobileWord("desktop.") +
     '</div></body>';
   throw new Error("__mobile_blocked__");
 })();
