@@ -1,4 +1,5 @@
 (function () {
+  const CACHE_VERSION = "20260513-1";
   const mobileByUserAgent = /Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const mobileByPointer = window.matchMedia("(pointer: coarse)").matches &&
     window.matchMedia("(max-width: 900px)").matches;
@@ -17,15 +18,20 @@
     return `<span class="mobile-word">${letters}</span>`;
   };
 
-  document.documentElement.innerHTML =
-    '<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+  const html =
+    '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
     '<meta name="robots" content="noindex, nofollow"><title>terrorism.cc</title>' +
-    '<link rel="stylesheet" href="/assets/css/site.css"></head>' +
+    '<link rel="stylesheet" href="/assets/css/site.css?v=' + CACHE_VERSION + '"></head>' +
     '<body class="mobile-blocked"><div class="mobile-message">' +
     mobileWord("Mobile") + " " + mobileWord("is") + " " + mobileWord("not") + " " + mobileWord("supported.") +
     '<br>' +
     mobileWord("Please") + " " + mobileWord("view") + " " + mobileWord("on") + " " + mobileWord("desktop.") +
-    '</div></body>';
+    '</div></body></html>';
+
+  try { window.stop(); } catch (_) {}
+  document.open();
+  document.write(html);
+  document.close();
   throw new Error("__mobile_blocked__");
 })();
 
@@ -39,7 +45,12 @@ if (location.pathname === "/index.html") {
 
   const isAdPage = location.pathname === "/AD.html";
 
-  navigator.serviceWorker.register("/assets/js/site-sw.js", { scope: "/" }).catch(() => {});
+  navigator.serviceWorker.register("/assets/js/site-sw.js?v=20260513-1", {
+    scope: "/",
+    updateViaCache: "none"
+  }).then((registration) => {
+    try { registration.update(); } catch (_) {}
+  }).catch(() => {});
 
   function postToWorker(message) {
     const controller = navigator.serviceWorker.controller;
