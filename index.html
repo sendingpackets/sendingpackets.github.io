@@ -69,11 +69,13 @@
   <div class="handle" id="handle"><span class="text default">kunt was here</span><span class="text hover">my discord</span></div>
   <div class="music-progress" aria-hidden="true"><div class="music-progress-fill" id="music-progress-fill"></div></div>
   <audio id="ambient-audio" src="/assets/misc/g47Fe6Wf73yeblhRHh.mp3" preload="auto" loop></audio>
+  <audio id="crying-audio" src="/assets/misc/pzR6g15fW8bfKCr3Ph.mp3" preload="auto" loop></audio>
 
 <script>
   const handle = document.getElementById('handle');
   const enterScreen = document.getElementById('enter-screen');
   const ambientAudio = document.getElementById('ambient-audio');
+  const cryingAudio = document.getElementById('crying-audio');
   const musicProgressFill = document.getElementById('music-progress-fill');
   const DISCORD_USER = 'sendingpackets';
   const INTRO_STING_KEY = 'mOco7LWe9juQE8TJJD';
@@ -124,7 +126,7 @@
     document.querySelectorAll('.stage-image-stack .stage-image').forEach((img) => {
       stageImageElements[img.dataset.key] = img;
     });
-    scheduleStageSequence();
+    scheduleStageSequence(8000 + Math.random() * 6000);
 
     document.querySelectorAll('.lamp .lamp-on').forEach((bulb) => {
       const startBurst = () => {
@@ -151,6 +153,7 @@
 
     ambientAudio.volume = 0.28;
     ambientAudio.play().catch(() => {});
+    fadeInCryingAudio();
     updateMusicProgress();
   }, { once: true });
 
@@ -181,12 +184,34 @@
     stageSequenceRunning = false;
   }
 
-  function scheduleStageSequence() {
-    const delay = 65000 + Math.random() * 55000;
+  function scheduleStageSequence(delay = 65000 + Math.random() * 55000) {
     setTimeout(async () => {
       await runStageSequence();
       scheduleStageSequence();
     }, delay);
+  }
+
+  function fadeInCryingAudio() {
+    const targetVolume = 0.1;
+    const fadeMs = 1500;
+    const start = performance.now();
+
+    cryingAudio.volume = 0;
+    cryingAudio.play().catch(() => {});
+
+    function tick(now) {
+      const progress = Math.min(1, (now - start) / fadeMs);
+      cryingAudio.volume = targetVolume * progress;
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+        return;
+      }
+
+      cryingAudio.volume = targetVolume;
+    }
+
+    requestAnimationFrame(tick);
   }
 
   function clearIntroStingMark() {
