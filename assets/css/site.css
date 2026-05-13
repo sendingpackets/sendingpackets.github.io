@@ -242,10 +242,10 @@ body.mobile-blocked {
 }
 
 .mobile-message {
-  width: max-content;
+  width: min(100%, max-content);
   max-width: calc(100vw - 32px);
   text-wrap: balance;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .mobile-word {
@@ -261,6 +261,14 @@ body.mobile-blocked {
 
   .mobile-message {
     max-width: calc(100vw - 24px);
+  }
+}
+
+@media (max-width: 700px), (pointer: coarse) {
+  .message {
+    font-size: clamp(22px, 8vw, 42px);
+    max-width: calc(100vw - 24px);
+    line-height: 1.08;
   }
 }
 
