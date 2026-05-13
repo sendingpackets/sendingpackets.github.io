@@ -49,10 +49,20 @@
     return path;
   }
 
+  const reservedPairs = new Set([26729, 31077, 28521, 28257, 30820]);
+
+  function randomPair() {
+    let a, b, code;
+    do {
+      a = chars[Math.floor(Math.random() * chars.length)];
+      b = chars[Math.floor(Math.random() * chars.length)];
+      code = (a.charCodeAt(0) << 8) | b.charCodeAt(0);
+    } while (reservedPairs.has(code));
+    return a + b;
+  }
+
   function randomTitle() {
-    const left = chars[Math.floor(Math.random() * chars.length)] + chars[Math.floor(Math.random() * chars.length)];
-    const right = chars[Math.floor(Math.random() * chars.length)] + chars[Math.floor(Math.random() * chars.length)];
-    return `${left} terrorism.cc ${right}`;
+    return `${randomPair()} terrorism.cc ${randomPair()}`;
   }
 
   const randomizeUrl = () => {
