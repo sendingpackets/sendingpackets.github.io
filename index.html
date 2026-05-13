@@ -68,7 +68,6 @@
 
   <div class="handle" id="handle"><span class="text default">kunt was here</span><span class="text hover">my discord</span></div>
   <div class="music-progress" aria-hidden="true"><div class="music-progress-fill" id="music-progress-fill"></div></div>
-  <div id="audio-debug" style="position:fixed;top:8px;left:8px;z-index:9999;max-width:280px;padding:6px 8px;background:rgba(0,0,0,.82);color:#d6d6d6;border:1px solid rgba(138,11,4,.75);font:12px/1.35 monospace;white-space:pre-wrap;pointer-events:none;">crying: idle</div>
   <audio id="ambient-audio" src="/assets/misc/g47Fe6Wf73yeblhRHh.mp3" preload="auto" loop></audio>
   <audio id="crying-audio" src="/assets/misc/pzR6g15fW8bfKCr3Ph.mp3" preload="auto" loop></audio>
 
@@ -77,7 +76,6 @@
   const enterScreen = document.getElementById('enter-screen');
   const ambientAudio = document.getElementById('ambient-audio');
   const cryingAudio = document.getElementById('crying-audio');
-  const audioDebug = document.getElementById('audio-debug');
   const musicProgressFill = document.getElementById('music-progress-fill');
   const DISCORD_USER = 'sendingpackets';
   const INTRO_STING_KEY = 'mOco7LWe9juQE8TJJD';
@@ -99,10 +97,6 @@
   let introStingScheduled = false;
   const stageImageElements = {};
   let stageSequenceRunning = false;
-  let cryingAudioStatus = 'idle';
-  let cryingAudioLastEvent = 'none';
-  let cryingAudioLastError = '';
-  let cryingAudioProbe = 'not run';
 
   document.querySelectorAll('.handle .text, .enter-message').forEach((text) => {
     const content = text.textContent;
@@ -202,23 +196,12 @@
     const fadeMs = 1500;
     const start = performance.now();
 
-    cryingAudioStatus = 'starting';
-    updateAudioDebug();
-    probeCryingAudioSource();
     cryingAudio.volume = 0;
-    cryingAudio.play().then(() => {
-      cryingAudioStatus = 'playing';
-      updateAudioDebug();
-    }).catch((error) => {
-      cryingAudioStatus = 'failed';
-      cryingAudioLastError = error && error.name ? error.name : String(error);
-      updateAudioDebug();
-    });
+    cryingAudio.play().catch(() => {});
 
     function tick(now) {
       const progress = Math.min(1, (now - start) / fadeMs);
       cryingAudio.volume = targetVolume * progress;
-      updateAudioDebug();
 
       if (progress < 1) {
         requestAnimationFrame(tick);
@@ -230,87 +213,6 @@
 
     requestAnimationFrame(tick);
   }
-
-  function updateAudioDebug() {
-    if (!audioDebug) return;
-
-    const error = cryingAudio.error ? `${cryingAudio.error.code}` : 'none';
-    const bufferedEnd = cryingAudio.buffered.length
-      ? cryingAudio.buffered.end(cryingAudio.buffered.length - 1).toFixed(2)
-      : 'none';
-    const duration = Number.isFinite(cryingAudio.duration) ? cryingAudio.duration.toFixed(2) : String(cryingAudio.duration);
-
-    audioDebug.textContent =
-      `crying: ${cryingAudioStatus}\n` +
-      `event: ${cryingAudioLastEvent}\n` +
-      `src: ${cryingAudio.getAttribute('src')}\n` +
-      `current: ${cryingAudio.currentSrc || 'none'}\n` +
-      `mp3: ${cryingAudio.canPlayType('audio/mpeg') || 'no'}\n` +
-      `paused: ${cryingAudio.paused}\n` +
-      `muted: ${cryingAudio.muted}\n` +
-      `volume: ${cryingAudio.volume.toFixed(3)}\n` +
-      `time: ${cryingAudio.currentTime.toFixed(2)}\n` +
-      `duration: ${duration}\n` +
-      `buffered: ${bufferedEnd}\n` +
-      `ready: ${cryingAudio.readyState}\n` +
-      `network: ${cryingAudio.networkState}\n` +
-      `error: ${cryingAudioLastError || error}\n` +
-      `fetch: ${cryingAudioProbe}`;
-  }
-
-  async function probeCryingAudioSource() {
-    cryingAudioProbe = 'fetching';
-    updateAudioDebug();
-
-    try {
-      const response = await fetch(cryingAudio.getAttribute('src'), {
-        cache: 'no-store',
-        credentials: 'same-origin'
-      });
-      const contentType = response.headers.get('content-type') || 'none';
-      const finalUrl = new URL(response.url, location.href);
-      const buffer = await response.arrayBuffer();
-      const bytes = Array.from(new Uint8Array(buffer.slice(0, 12)))
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join(' ');
-
-      cryingAudioProbe =
-        `${response.status} ${response.statusText || ''}\n` +
-        `type: ${contentType}\n` +
-        `url: ${finalUrl.pathname}\n` +
-        `bytes: ${buffer.byteLength}\n` +
-        `head: ${bytes}`;
-    } catch (error) {
-      cryingAudioProbe = error && error.name ? error.name : String(error);
-    }
-
-    updateAudioDebug();
-  }
-
-  [
-    'loadstart',
-    'loadedmetadata',
-    'canplay',
-    'playing',
-    'pause',
-    'waiting',
-    'stalled',
-    'error',
-    'ended',
-    'timeupdate',
-    'volumechange'
-  ].forEach((eventName) => {
-    cryingAudio.addEventListener(eventName, () => {
-      cryingAudioLastEvent = eventName;
-      if (eventName === 'error') {
-        cryingAudioStatus = 'failed';
-        cryingAudioLastError = cryingAudio.error ? `media error ${cryingAudio.error.code}` : 'media error';
-      }
-      updateAudioDebug();
-    });
-  });
-
-  updateAudioDebug();
 
   function clearIntroStingMark() {
     try { localStorage.removeItem(INTRO_STING_KEY); } catch (_) {}
