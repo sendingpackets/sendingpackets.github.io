@@ -231,19 +231,25 @@ body.mobile-blocked {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #550400;
-  font-size: clamp(18px, 5.5vw, 32px);
-  line-height: 1.3;
+  color: #8a0b04;
+  font-size: clamp(18px, 8.2vw, 38px);
+  line-height: 1.22;
   text-align: center;
-  filter: blur(0.8px) contrast(1.6) saturate(0.7);
-  padding: 0 14px;
+  filter: blur(0.35px) contrast(1.35) saturate(1.25);
+  padding: 0 16px;
   box-sizing: border-box;
-  text-shadow: 0 0 2px #550400, 0 0 4px #550400, 0 0 12px #550400, 0 0 20px #550400;
+  text-shadow: 0 0 2px #8a0b04, 0 0 7px #8a0b04, 0 0 18px #8a0b04, 0 0 32px #550400;
 }
 
 .mobile-message {
-  max-width: min(94vw, 560px);
-  overflow-wrap: break-word;
+  width: min(92vw, 620px);
+  overflow-wrap: normal;
+  text-wrap: balance;
+}
+
+.mobile-word {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 body.obliterate-screen {
