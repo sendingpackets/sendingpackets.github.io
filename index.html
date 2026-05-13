@@ -102,6 +102,7 @@
   let cryingAudioStatus = 'idle';
   let cryingAudioLastEvent = 'none';
   let cryingAudioLastError = '';
+  let cryingAudioProbe = 'not run';
 
   document.querySelectorAll('.handle .text, .enter-message').forEach((text) => {
     const content = text.textContent;
@@ -203,6 +204,7 @@
 
     cryingAudioStatus = 'starting';
     updateAudioDebug();
+    probeCryingAudioSource();
     cryingAudio.volume = 0;
     cryingAudio.play().then(() => {
       cryingAudioStatus = 'playing';
@@ -233,16 +235,56 @@
     if (!audioDebug) return;
 
     const error = cryingAudio.error ? `${cryingAudio.error.code}` : 'none';
+    const bufferedEnd = cryingAudio.buffered.length
+      ? cryingAudio.buffered.end(cryingAudio.buffered.length - 1).toFixed(2)
+      : 'none';
+    const duration = Number.isFinite(cryingAudio.duration) ? cryingAudio.duration.toFixed(2) : String(cryingAudio.duration);
+
     audioDebug.textContent =
       `crying: ${cryingAudioStatus}\n` +
       `event: ${cryingAudioLastEvent}\n` +
+      `src: ${cryingAudio.getAttribute('src')}\n` +
+      `current: ${cryingAudio.currentSrc || 'none'}\n` +
+      `mp3: ${cryingAudio.canPlayType('audio/mpeg') || 'no'}\n` +
       `paused: ${cryingAudio.paused}\n` +
       `muted: ${cryingAudio.muted}\n` +
       `volume: ${cryingAudio.volume.toFixed(3)}\n` +
       `time: ${cryingAudio.currentTime.toFixed(2)}\n` +
+      `duration: ${duration}\n` +
+      `buffered: ${bufferedEnd}\n` +
       `ready: ${cryingAudio.readyState}\n` +
       `network: ${cryingAudio.networkState}\n` +
-      `error: ${cryingAudioLastError || error}`;
+      `error: ${cryingAudioLastError || error}\n` +
+      `fetch: ${cryingAudioProbe}`;
+  }
+
+  async function probeCryingAudioSource() {
+    cryingAudioProbe = 'fetching';
+    updateAudioDebug();
+
+    try {
+      const response = await fetch(cryingAudio.getAttribute('src'), {
+        cache: 'no-store',
+        credentials: 'same-origin'
+      });
+      const contentType = response.headers.get('content-type') || 'none';
+      const finalUrl = new URL(response.url, location.href);
+      const buffer = await response.arrayBuffer();
+      const bytes = Array.from(new Uint8Array(buffer.slice(0, 12)))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join(' ');
+
+      cryingAudioProbe =
+        `${response.status} ${response.statusText || ''}\n` +
+        `type: ${contentType}\n` +
+        `url: ${finalUrl.pathname}\n` +
+        `bytes: ${buffer.byteLength}\n` +
+        `head: ${bytes}`;
+    } catch (error) {
+      cryingAudioProbe = error && error.name ? error.name : String(error);
+    }
+
+    updateAudioDebug();
   }
 
   [
