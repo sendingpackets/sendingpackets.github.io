@@ -192,12 +192,23 @@
   }
 
   function fadeInCryingAudio() {
-    const targetVolume = 0.06;
-    const fadeMs = 3000;
+    const targetVolume = 0.3;
+    const fadeMs = 1500;
     const start = performance.now();
 
+    cryingAudio.loop = true;
     cryingAudio.volume = 0;
-    cryingAudio.play().catch(() => {});
+    try { cryingAudio.currentTime = 0; } catch (_) {}
+
+    const play = () => cryingAudio.play().catch(() => {});
+
+    if (cryingAudio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      play();
+    } else {
+      cryingAudio.load();
+      cryingAudio.addEventListener('canplay', play, { once: true });
+      play();
+    }
 
     function tick(now) {
       const progress = Math.min(1, (now - start) / fadeMs);
