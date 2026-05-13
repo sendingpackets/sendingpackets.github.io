@@ -1,3 +1,8 @@
+if (/Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    (window.matchMedia("(pointer: coarse)").matches && window.matchMedia("(max-width: 900px)").matches)) {
+  throw new Error("__mobile_guard_stopped__");
+}
+
 if (location.pathname === "/index.html") {
   location.replace("/");
 }
